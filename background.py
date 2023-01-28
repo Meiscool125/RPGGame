@@ -9,8 +9,8 @@ clock = pygame.time.Clock()
 # main fonts
 mainfont = pygame.font.Font(None, 35)
 # background variables
-BGX = 0
-BGY = 0
+BGX = -50
+BGY = -50
 BGXSpeed = 0
 BGYSpeed = 0
 # function

@@ -22,12 +22,42 @@ class Player(pygame.sprite.Sprite):
         super().__init__()
         self.RightWalkAnimationList = RightWalkAnimationList
         self.AnimationIndex = 0
-        self.TimeSinceLastFrame = 0
+        self.TimeSinceLastFrame = pygame.time.get_ticks() / 1000
         self.image = self.RightWalkAnimationList[self.AnimationIndex]
         self.rect = self.image.get_rect()
+        self.PhysCanMove = False
         self.rect.x = x
         self.rect.y = y
-    def UpdateAnimations(self):
-        if self.TimeSinceLastFrame > 0.3:
+        self.XSpeed = 0
+        self.YSpeed = 0
+        self.CurrentlyMoving = False
+        self.Direction = "Right"
+        self.AtBorderEdge = False
+    def UpdateAnimations(self, CurrentTime):
+        if CurrentTime - self.TimeSinceLastFrame > 0.3:
             self.AnimationIndex += 1
+            if self.AnimationIndex > 9:
+                self.AnimationIndex = 0
+            self.TimeSinceLastFrame = pygame.time.get_ticks() / 1000
+    def update(self):
+        if self.CurrentlyMoving and self.AtBorderEdge == False:
             self.image = self.RightWalkAnimationList[self.AnimationIndex]
+
+            if (pygame.time.get_ticks() / 1000) - self.TimeSinceLastFrame > 0.1:
+                self.AnimationIndex += 1
+                if self.AnimationIndex > 9:
+                    self.AnimationIndex = 0
+                self.TimeSinceLastFrame = pygame.time.get_ticks() / 1000
+    def FlipPlayer(self):
+
+        self.image = pygame.transform.flip(self.image, True, False)
+
+    def PhysMove(self):
+        self.rect.x += self.XSpeed
+        self.rect.y += self.YSpeed
+        #if self.rect.x > 500:
+            #self.XSpeed = 0
+        #if self.rect.x < -1000:
+            #self.XSpeed = 0
+
+
